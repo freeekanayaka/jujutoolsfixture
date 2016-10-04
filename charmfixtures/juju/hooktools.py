@@ -17,6 +17,24 @@ class ConfigGet(object):
         return {"stdout": io.BytesIO(stdout.encode("utf-8"))}
 
 
+class StatusSet(object):
+    """status-set wrapper."""
+
+    name = "status-set"
+
+    def __init__(self, entries):
+        self._entries = entries
+
+    def __call__(self, proc_args):
+        parser = argparse.ArgumentParser()
+        parser.add_argument("state")
+        parser.add_argument("message", nargs="?")
+        args = parser.parse_args(proc_args["args"])
+        self._entries.append("{}: {}".format(args.state, args.message))
+        stdout = json.dumps(self._entries) + "\n"
+        return {"stdout": io.BytesIO(stdout.encode("utf-8"))}
+
+
 class JujuLog(object):
 
     name = "juju-log"

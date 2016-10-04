@@ -2,6 +2,7 @@ from testtools import TestCase
 
 from charmfixtures.juju.hooktools import (
     ConfigGet,
+    StatusSet,
     JujuLog,
 )
 
@@ -32,3 +33,18 @@ class JujuLogTest(TestCase):
     def test_first_entry(self):
         self.process({"args": ["juju-log", "hello world"]})
         self.assertEqual("INFO: hello world", self.log[0])
+
+
+class StatusSetTest(TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.status = []
+        self.process = StatusSet(self.status)
+
+    def test_no_entries(self):
+        self.assertEqual([], self.status)
+
+    def test_first_entry(self):
+        self.process({"args": ["state", "msg"]})
+        self.assertEqual("state: msg", self.status[0])
