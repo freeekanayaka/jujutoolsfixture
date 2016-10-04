@@ -13,6 +13,7 @@ from charmfixtures.juju import (
     ConfigGet,
     JujuLog,
     OpenPort,
+    StatusSet,
 )
 
 hookenv = try_import("charmhelpers.core.hookenv")
@@ -33,6 +34,7 @@ class CharmTest(TestCase):
         self.processes.add(ConfigGet(self.application.config))
         self.processes.add(JujuLog(self.unit.log))
         self.processes.add(OpenPort(self.unit.ports))
+        self.processes.add(StatusSet(self.unit.status))
 
         # If charmhelpers is around, clear its config cache.
         hookenv and hookenv.cache.clear()
